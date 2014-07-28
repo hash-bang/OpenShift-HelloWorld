@@ -28,3 +28,17 @@ Assuming your app is called `fooapp`:
 
 * Restart the server with `rhc app restart fooapp`
 * Get the console log via `rhc tail fooapp`
+
+Common GOTCHAs
+--------------
+OpenShift can host your application on any potential IP or Port and routes so that your app appears at `http://foo-bar.rhcloud.com`.
+
+Because of this your application needs to read the `OPENSHIFT_NODEJS_IP` and `OPENSHIFT_NODEJS_PORT` environment variables at book and listen on those.
+
+For most node Applications this means the following code needs inserting to replace your `app.listen()` invocation:
+
+	var host = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+	var port = Number(process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000);
+	app.listen(port, host, function() {
+		console.log("Listening at " + host + ':' + port);
+	});
