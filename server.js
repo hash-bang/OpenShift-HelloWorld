@@ -9,7 +9,8 @@ app.get('/', function(req, res) {
 	res.send('Hello World!');
 });
 
-var port = Number(process.env.PORT || 3000);
-app.listen(port, function() {
-	console.log("Listening on " + port);
+var host = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = Number(process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 3000);
+app.listen(port, host, function() {
+	console.log("Listening at " + host + ':' + port);
 });
